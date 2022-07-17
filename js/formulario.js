@@ -3,10 +3,24 @@ const inputs = document.querySelectorAll('#formulario input');
 
 const expresiones = {
     nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+	paterno: /^[a-zA-ZÀ-ÿ]{1,40}$/,
+	materno: /^[a-zA-ZÀ-ÿ]{1,40}$/,
     matricula: /^[a-z0-9]{10,10}$/,
-    carrera: /^[a-zA-Z]{10,70}$/,
+	telefono: /^[0-9]{1,10}$/,
     correo: /^[a-z0-9.]+@utez.edu.mx+$/,
-    password: /^.{8,12}$/,
+    password: /^.{8,100}$/
+}
+
+const campos = {
+	fecha:false,
+	nombre: false,
+	paterno:false,
+	materno:false,
+	genero:false,
+	matricula: false,
+	telefono:false,
+	correo: false,
+	password: false
 }
 
 const validarFormulario = (e) => {
@@ -17,8 +31,14 @@ const validarFormulario = (e) => {
 		case "matricula":
 			validarCampo(expresiones.matricula, e.target, 'matricula');
 		break;
-        case "carrera":
-			validarCampo(expresiones.carrera, e.target, 'carrera');
+        case "paterno":
+			validarCampo(expresiones.paterno, e.target, 'paterno');
+		break;
+		case "materno":
+			validarCampo(expresiones.materno, e.target, 'materno');
+		break;
+		case "telefono":
+			validarCampo(expresiones.telefono, e.target, 'telefono');
 		break;
 		case "correo":
 			validarCampo(expresiones.correo, e.target, 'correo');
@@ -27,8 +47,9 @@ const validarFormulario = (e) => {
 			validarCampo(expresiones.password, e.target, 'password');
 			validarPassword2();
 		break;
-	
-		
+		case "password2":
+			validarPassword2();
+		break;	
 	}
 }
 
@@ -50,6 +71,26 @@ const validarCampo = (expresion, input, campo) => {
 	}
 }
 
+const validarPassword2 = () => {
+	const inputPassword1 = document.getElementById('password');
+	const inputPassword2 = document.getElementById('password2');
+
+	if(inputPassword1.value !== inputPassword2.value){
+		document.getElementById(`grupo__password2`).classList.add('formulario__grupo-incorrecto');
+		document.getElementById(`grupo__password2`).classList.remove('formulario__grupo-correcto');
+		document.querySelector(`#grupo__password2 i`).classList.add('fa-times-circle');
+		document.querySelector(`#grupo__password2 i`).classList.remove('fa-check-circle');
+		document.querySelector(`#grupo__password2 .formulario__input-error`).classList.add('formulario__input-error-activo');
+		campos['password'] = false;
+	} else {
+		document.getElementById(`grupo__password2`).classList.remove('formulario__grupo-incorrecto');
+		document.getElementById(`grupo__password2`).classList.add('formulario__grupo-correcto');
+		document.querySelector(`#grupo__password2 i`).classList.remove('fa-times-circle');
+		document.querySelector(`#grupo__password2 i`).classList.add('fa-check-circle');
+		document.querySelector(`#grupo__password2 .formulario__input-error`).classList.remove('formulario__input-error-activo');
+		campos['password'] = true;
+	}
+}
 
 inputs.forEach((input) => {
 	input.addEventListener('keyup', validarFormulario);
@@ -60,7 +101,7 @@ formulario.addEventListener('submit', (e) => {
 	e.preventDefault();
 
 	const terminos = document.getElementById('terminos');
-	if(campos.nombre && campos.matricula && campos.carrera && campos.correo && campos.password && terminos.checked ){
+	if(campos.nombre && campos.paterno && campos.materno && campos.telefono && campos.matricula && campos.correo && campos.password && terminos.checked ){
 		formulario.reset();
 
 		document.getElementById('formulario__mensaje-exito').classList.add('formulario__mensaje-exito-activo');
@@ -75,3 +116,4 @@ formulario.addEventListener('submit', (e) => {
 		document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
 	}
 });
+
